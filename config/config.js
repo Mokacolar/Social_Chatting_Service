@@ -3,14 +3,15 @@ module.exports = {
         "username" : "root",
         "password" : "root1234",
         "database" : "scs",
-        "host" : "scs.cwzaebdj43nx.ap-northeast-1.rds.amazonaws.com",
-        "dialect" : "mysql"
+        "host" : "127.0.0.1",
+        "dialect" : "mysql",
+        "port" : "33066"
     },
     "production" : {
         "username" : "root",
         "password" : "root1234",
         "database" : "scs",
-        "host" : "scs.cwzaebdj43nx.ap-northeast-1.rds.amazonaws.com",
+        "host" : "scs.cfckrcssrqjw.ap-northeast-2.rds.amazonaws.com",
         "dialect" : "mysql"
     },
 }
