@@ -8,7 +8,7 @@ const server = http.createServer(app);
 const { Server } = require("socket.io");
 const { Sequelize, where } = require('sequelize');
 const io = new Server(server);
-const port = prod ? process.env.port : 3000;
+const port = prod ? process.env.PORT : 3000;
 
 server.listen(port, () => {
     console.log(`포트 ${port} 번 연결됨.`);
