@@ -10,6 +10,8 @@ const sequelize = new Sequelize(config.database, config.username, config.passwor
 
 db.members = require('./members')(sequelize, Sequelize);
 db.friends = require('./friends')(sequelize, Sequelize);
+db.inbox = require('./inbox')(sequelize, Sequelize);
+db.dm= require('./dm')(sequelize, Sequelize);
 
 //관계 설정
 Object.keys(db).forEach(modelName => {

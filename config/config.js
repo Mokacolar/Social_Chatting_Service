@@ -4,7 +4,8 @@ module.exports = {
         "password" : "root1234",
         "database" : "scs",
         "host" : "127.0.0.1",
-        "dialect" : "mysql"
+        "dialect" : "mysql",
+        "port" : "33066"
     },
     "production" : {
         "username" : "root",

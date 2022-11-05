@@ -125,12 +125,6 @@ nav{
     background: #f0f0f0;
 }
 
-#reqFriendBtn{
-    text-align: center;
-    border-bottom: 1px solid #f0f0f0;
-    padding: 10px 0px;
-}
-
 #loginForm {
     float: left;
     display: block;
@@ -189,14 +183,29 @@ nav{
     text-align: center;
     border-radius: 5px;
 }
+#requestHeader {
+    background-color: #0084FF;
+    color: #fff;
+    height: 40px;
+    font-size: 18px;
+    line-height: 40px;
+    text-align: center;
+    border-radius: 5px;
+}
+
+#friendHeader {
+    background-color: #0084FF;
+    color: #fff;
+    height: 40px;
+    font-size: 18px;
+    line-height: 40px;
+    text-align: center;
+    border-radius: 5px;
+}
 .userEl {
     text-align: center;
     border-bottom: 1px solid #f0f0f0;
     padding: 10px 0px;
-    cursor: pointer;
-}
-.userEl:hover{
-    background: #f0f0f0;
 }
 
 .roomEl {
@@ -204,6 +213,11 @@ nav{
     border-bottom: 1px solid #f0f0f0;
     padding: 10px 0px;
     cursor: pointer;
+}
+.friendEl {
+    text-align: center;
+    border-bottom: 1px solid #f0f0f0;
+    padding: 10px 0px;
 }
 
 .roomEl:hover{
@@ -218,7 +232,21 @@ nav{
     border: 1px solid #ddd;
 }
 
+#DMCover {
+    width: 600px;
+    border: 1px solid #ddd;
+}
+
+
 #chatHeader {
+    height: 60px;
+    text-align: center;
+    line-height: 60px;
+    font-size: 25px;
+    font-weight: 900;
+    border-bottom: 1px solid #ddd;
+}
+#DMHeader {
     height: 60px;
     text-align: center;
     line-height: 60px;
@@ -228,6 +256,11 @@ nav{
 }
 
 #chatLog {
+    height: 700px;
+    overflow-y: auto;
+    padding: 10px;
+}
+#DMLog {
     height: 700px;
     overflow-y: auto;
     padding: 10px;
@@ -272,6 +305,12 @@ nav{
     height: 40px;
     border-top: 2px solid #f0f0f0;
 }
+#DMForm {
+    display: block;
+    width: 100%;
+    height: 40px;
+    border-top: 2px solid #f0f0f0;
+}
 
 #message {
     width: 85%;
@@ -279,8 +318,17 @@ nav{
     border: none;
     padding-bottom: 0;
 }
+#DMmessage {
+    width: 85%;
+    height: calc(100% - 1px);
+    border: none;
+    padding-bottom: 0;
+}
 
 #message:focus {
+    outline: none;
+}
+#DMmessage:focus {
     outline: none;
 }
 
@@ -291,6 +339,14 @@ nav{
     color: #0084FF;
     font-size: 17px;
 }
+#DMFrom > input[type=submit] {
+    outline: none;
+    border: none;
+    background: none;
+    color: #0084FF;
+    font-size: 17px;
+}
+
 #memberWrap{
     width: 200px;
 }
@@ -299,6 +355,23 @@ nav{
     border: 1px solid #aaaaaa;
     border-radius: 5px;
 }
+
+#friendsWrap{
+    width: 1200px;
+}
+
+#requestList {
+    margin-bottom: 15px;
+    border: 1px solid #aaaaaa;
+    border-radius: 5px;
+}
+
+#friendList {
+    border: 1px solid #aaaaaa;
+    margin-bottom: 15px;
+    border-radius: 5px;
+}
+
 
 #memberHeader {
     height: 40px;
@@ -328,10 +401,21 @@ nav{
     display: flex;
     justify-content: space-around;
 }
+#friendsCover{
+    width: 1280px;
+    margin: 0 auto;
+    padding-top: 20px;
+    display: flex;
+    justify-content: space-around;
+}
 .notice {
     text-align: center;
     color: gray;
     font-size: 13px;
+}
+.reqFriendBtn{
+    cursor: pointer;
+    background-color: #9c98ee;
 }
 </style>
 </head>
@@ -405,21 +489,45 @@ nav{
             </div>
         </div>
 
-
         <div id = "usersCover">
             <div id="usersWrap">
                 <div id="usersList">
                     <div id="usersHeader">Users</div>
-                    <div id="userSelect">
-                        <div class="userEl">spring <button id = "reqFreind">친구 요청</button></div>
-                    </div>
+                    <div id="userSelect"></div>
                 </div>
             </div>
         </div>
 
-    </div>
+        <div id = "friendsCover">
+            <div id="friendsWrap">
+                <div id="requestList">
+                    <div id = "requestHeader">수신함</div>
+                    <div id = "requestSelect"></div>
+                    
+                </div>
+                <div id="friendList">
+                    <div id = "friendHeader">목록</div>
+                    <div id = "friendSelect"></div>
+                </div>
+            </div>
+        </div>
 
-    
+        <div id = "DMCover">
+            <div id = "DMWrap">
+                <div id="DMHeader"></div>
+                    <div id="DMLog">
+                        <div class="anotherMsg">
+                        </div>
+                        <div class="myMsg">
+                        </div>
+                    </div>
+                    <form id="DMForm">
+                        <input type="text" autocomplete="off" size="30" id="DMmessage" placeholder="메시지를 입력하세요">
+                        <input type="submit" value="보내기">
+                    </form>
+            </div>
+        </div>
+    </div>
 </div>
 </body>
 <script src="/socket.io/socket.io.js"></script>
@@ -443,6 +551,15 @@ nav{
     var $roomsCover = $('#roomsCover');
     var $usersCover = $('#usersCover');
     var $userSelect = $('#userSelect');
+    var $friendSelect = $('#friendSelect');
+    var $friendsCover = $('#friendsCover');
+    var $reqFriendBtn = $('#reqFriendBtn');
+    var $friendList = $('#friendList');
+    var $requestList = $('#requestList');
+    var $requestSelect = $('#requestSelect');
+    var $DMCover = $('#DMCover');
+    var $DMLog = $('#DMLog');
+    var $DMForm = $('#DMForm');
 
     $(function () {
 
@@ -465,15 +582,72 @@ nav{
             $chatWrap.hide();
             $memberWrap.hide();
             $usersCover.hide();
+            $friendsCover.hide();
+            $DMCover.hide();
         });
 
         $("#usersBtn").click(function (e){
             e.preventDefault();
             $roomsCover.hide();
+            $friendsCover.hide();
             $usersCover.show();
+            $DMCover.hide();
+            socket.emit("send memberlist", socketId);
+            socket.on("memberlist", (memberList, friendList)=>{
+                let html = "";
+                //if 이미 친구이면 btn 없는 버전으로 붙히기
+                //O(n^2) 
+                memberList.forEach((el) => {
+                    html += `<div class="userEl"><strong> ID : ${el.userId} 가입일 : ${el.createdAt} 친구 수 : ${el.friendsCount} </strong><button id="reqFriendBtn", data-id = "${el.id}">친구 요청</button></div>`;
+                });
+                friendList.forEach((el) => {
+                    html += `<div class="userEl"><strong> ID : ${el.userId} 가입일 : ${el.createdAt} 친구 수 : ${el.friendsCount} </strong></div>`;
+                })
+                $userSelect.html(html);  
+            });
+        });
+
+        $("#friendsBtn").click(function(e) {
+            e.preventDefault();
+            $friendsCover.show();
+            $roomsCover.hide();
+            $usersCover.hide();
+            $DMCover.hide();
+
+            //receive inbox
+            socket.emit('sender inbox', socketId);
+            socket.on('receive inbox', (requestList) => {
+                let html = "";
+                requestList.forEach((el) =>{
+                    html += `<div class="friendEl", data-id="${el.sender}">ID : ${el.sender} 요청날짜 : ${el.createdAt} <button id="acceptBtn", data-id = "${el.receiver}">수락</button> <button id="rejectBtn", data-id = "${el.receiver}">거절</button></div>`;
+                });
+                $requestSelect.html(html);
+            })
+
+            //recive friendlist
+            socket.emit('sender friendList', socketId);
+            socket.on('receive friendList', (friendList) => {
+                console.log(friendList);
+                let html = "";
+                friendList.forEach((el) =>{
+                    html += `<div class="friendEl", data-id="${el.id}">ID : ${el.userId} 가입날짜: ${el.createdAt} 친구 수 : ${el.friendsCount} <button id="delFriendBtn", data-id = "${el.id}">친구 삭제</button> <button id="DMBtn", data-id = "${el.userId}">DM</button></div>`;
+                });
+                $friendSelect.html(html);
+            })
+        });
+
+        $("#inboxBtn").click(function(e) {
+            e.preventDefault();
+            $requestList.show();
+            $friendList.hide();
+        });
+
+        $("#friendListBtn").click(function(e) {
+            e.preventDefault();
+            $requestList.hide();
+            $friendList.show();
         });
         
-    
         $("#logoutBtn").click(function (e) {
 	        e.preventDefault();
             socket.emit('logout');
@@ -501,6 +675,7 @@ nav{
                         $loginWrap.hide();
                         $contentWrap.show();
                         $roomsCover.hide();
+                        $friendsCover.hide();
                         $('#roomsBtn').click();
                     } else {
                         alert(res.data);
@@ -542,7 +717,6 @@ nav{
             if (roomId !== $(this).data('id')) {
                 roomId = $(this).data('id');
             }
-            console.log(roomId);
             $(this).parents().children().removeClass("active");
             $(this).addClass("active");
             $chatLog.html(""); // 채팅 기록을 지우는 코드
@@ -551,6 +725,44 @@ nav{
                 roomId
             });
         });
+        
+        //친구요청 눌렀을 때
+        $(document).on("click","#reqFriendBtn", function (){
+            //receiver
+            let receiverId = $(this).data('id');
+            //sender
+            let senderId = socketId;
+            socket.emit('send req', receiverId, senderId);
+            alert("친구요청 완료!");
+        });
+        
+        //친구 수락 버튼 눌렀을 때
+        $(document).on("click", "#acceptBtn", function () {
+            let senderId = $(this).parent().data('id');
+            let receiverId = $(this).data('id');
+            socket.emit('accept friend',receiverId, senderId);
+            alert("친구 수락!");
+            $("#friendsBtn").click();
+        })
+
+        //친구 거절 버튼 눌렀을 때
+        $(document).on("click", "#rejectBtn", function () {
+            let senderId = $(this).parent().data('id');
+            let receiverId = $(this).data('id');
+            socket.emit('reject friend',receiverId, senderId);
+            alert("친구 거절!");
+            $("#friendsBtn").click();
+        })
+
+        //친구 삭제 버튼 눌렀을 때
+        $(document).on("click", "#delFriendBtn", function () {
+            let nowUserSocketId = socketId;
+            let friendId = $(this).data('id');
+            socket.emit('del friend', friendId, nowUserSocketId);
+            alert("친구 삭제 완료!");
+            $("#friendsBtn").click();
+        })
+
         
         //유저가 들어오면 userlist에 추가해주기
         socket.on('userlist', function (data) {
@@ -598,10 +810,57 @@ nav{
             }
             $chatLog.scrollTop($chatLog[0].scrollHeight - $chatLog[0].clientHeight);
         });  
-    //현재 구현해야할 것
-    // room 에 참여인원 수 방번호 출력
-    // room 안에서 참여인원 수 출력
-    // socket.io에 채팅내역 남기기
+
+        //DM
+        $(document).on("click", "#DMBtn", function (e) {
+            e.preventDefault();
+            $friendsCover.hide();
+            $DMCover.show();
+            $(this).parents().children().removeClass("active");
+            $(this).addClass("active");
+            $DMLog.html(""); 
+            $('#DMHeader').html(`${$(this).data('id')}`);
+            socket.emit('make DM room', socketId, $(this).data('id'));
+            socket.on('DM roomId', (newroomId) => {
+                roomId = newroomId;
+            })
+        })
+
+        $(document).on("submit", "#DMForm", function (e) {
+            console.log("보내기");
+            e.preventDefault();
+            let msg = $("#DMmessage");
+            if (msg.val() === "") {
+                return false;
+            } else {
+                let data = {
+                    roomId: roomId,
+                    msg: msg.val()
+                };
+            console.log(data);
+            socket.emit("send DM message", data);
+            msg.val("");
+            msg.focus();
+            }
+        })
+
+        socket.on('new DM message', function (data) {
+            console.log("new DM message");
+            if (data.socketId === socketId) {
+                $DMLog.append(`<div class="myMsg msgEl"><span class="msg">${data.msg}</span></div>`)
+            }else {
+                $DMLog.append(`<div class="anotherMsg msgEl"><span class="anotherName">${data.name}</span><span class="msg">${data.msg}</span></div>`)
+            }
+            $DMLog.scrollTop($DMLog[0].scrollHeight - $DMLog[0].clientHeight);
+        });  
+
+        socket.on('lefted DM room', function (data) {
+	        $DMLog.append(`<div class="notice"><strong>${data}</strong> lefted the room</div>`)
+        });
+        socket.on('joined DM room', function (data) {
+	        $DMLog.append(`<div class="notice"><strong>${data}</strong> joined the room</div>`)
+        });
+    
     }
     
 );

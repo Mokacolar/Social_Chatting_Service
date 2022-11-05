@@ -1,20 +1,18 @@
 module.exports = (sequelize, DataTypes) => {
-    const members = sequelize.define('tbl_members', {
-        userId : {
+    const dm = sequelize.define('tbl_DM', {
+        friend1 : {
             type : DataTypes.STRING(64),
             allowNull : false,
-            unique: true
         },
-        password: {
+        friend2: {
             type: DataTypes.STRING(64),
             allowNull : false,
         },
-        friendsCount: {
-            type: DataTypes.BIGINT(64),
-            default : 0
+        key : {
+            type: DataTypes.STRING(64),
+            allowNull : false,
         }
         //createAt 으로 자동으로 생성
-        
-    });
-    return members;
+    })
+    return dm;
 };
